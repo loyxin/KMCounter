@@ -90,6 +90,7 @@ CreateGui1:
   Gui, Show, Hide
 return
 
+
 ; 统计界面下，滚轮与翻页键切换历史回忆。
 #If (WinActive("ahk_id " hWin))
 WheelDown::
@@ -700,11 +701,13 @@ LoadControlList(layout:="")
   , w2   :=  w*2+10                                     ; BackSpace
   , w3   := (w*13 + w2 - w*12 + m.1*0)/2                ; Tab      \
   , w4   := (w*13 + w2 - w*11 + m.1*1)/2                ; CapsLock Enter
-  , w5   := (w*13 + w2 - w*10 + m.1*2)/2                ; Shift
+  , w5   := (w*13 + w2 - w*10 + m.1*2)/2-w/2                ; Shift
   , w6_1 :=  w3                                         ; Ctrl
   , w6_2 :=  w6_1-10                                    ; Win      Alt
-  , w6_3 := (w*13 + w2 - w6_1*2 - w6_2*4 + m.1*7)       ; Space
-
+  , w6_3 := (w*13 + w2 - w6_1*2 - w6_2*4 + m.1*5)       ; Space
+  , w6_25 := w*6.25
+  , w1_5 := w*1.5
+  , w1_2 := w*1.3
   , m7   := (w*13 + w2 - w*13 + m.1*4)/3                ; ESC-F1 间距
   , m.7  :=  m7
   , m.8  :=  "+" m7
@@ -724,6 +727,7 @@ LoadControlList(layout:="")
   list.push({Hwnd:"sc68", Text:"F10", x:m.2, y:"", w:w, h:h})
   list.push({Hwnd:"sc87", Text:"F11", x:m.2, y:"", w:w, h:h})
   list.push({Hwnd:"sc88", Text:"F12", x:m.2, y:"", w:w, h:h})
+  list.push({Hwnd:"sc339", Text:"delete", x:m.2, y:"", w:w, h:h})
   ; 第二行
   list.push({Hwnd:"sc41", Text:"``",        x:"m", y:m.4, w:w,  h:h})
   list.push({Hwnd:"sc2",  Text:"1",         x:m.2, y:"",  w:w,  h:h})
@@ -739,6 +743,7 @@ LoadControlList(layout:="")
   list.push({Hwnd:"sc12", Text:"-",         x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc13", Text:"=",         x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc14", Text:"BackSpace", x:m.2, y:"",  w:w2, h:h})
+  list.push({Hwnd:"sc327", Text:"Home", x:m.2, y:"", w:w, h:h})
   ; 第三行
   list.push({Hwnd:"sc15", Text:"Tab", x:"m", y:m.2, w:w3, h:h})
   list.push({Hwnd:"sc16", Text:"q",   x:m.2, y:"",  w:w,  h:h})
@@ -754,6 +759,7 @@ LoadControlList(layout:="")
   list.push({Hwnd:"sc26", Text:"[",   x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc27", Text:"]",   x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc43", Text:"\",   x:m.2, y:"",  w:w3, h:h})
+  list.push({Hwnd:"sc329", Text:"PageUp", x:m.2, y:"", w:w, h:h})
   ; 第四行
   list.push({Hwnd:"sc58", Text:"CapsLock", x:"m", y:m.2, w:w4, h:h})
   list.push({Hwnd:"sc30", Text:"a",        x:m.2, y:"",  w:w,  h:h})
@@ -768,6 +774,7 @@ LoadControlList(layout:="")
   list.push({Hwnd:"sc39", Text:";",        x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc40", Text:"'",        x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc28", Text:"Enter",    x:m.2, y:"",  w:w4, h:h})
+  list.push({Hwnd:"sc337", Text:"PageDn", x:m.2, y:"", w:w, h:h})
   ; 第五行
   list.push({Hwnd:"sc42", Text:"Shift", x:"m", y:m.2, w:w5, h:h})
   list.push({Hwnd:"sc44", Text:"z",     x:m.2, y:"",  w:w,  h:h})
@@ -781,72 +788,76 @@ LoadControlList(layout:="")
   list.push({Hwnd:"sc52", Text:".",     x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc53", Text:"/",     x:m.2, y:"",  w:w,  h:h})
   list.push({Hwnd:"sc310", Text:"Shift", x:m.2, y:"",  w:w5, h:h})
+  list.push({Hwnd:"sc328", Text:"▲",  x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc335", Text:"End", x:m.2, y:"", w:w, h:h})
   ; 第六行
-  list.push({Hwnd:"sc29",  Text:"Ctrl",  x:"m", y:m.2, w:w6_1, h:h})
-  list.push({Hwnd:"sc347", Text:"Win",   x:m.2, y:"",  w:w6_2, h:h})
-  list.push({Hwnd:"sc56",  Text:"Alt",   x:m.2, y:"",  w:w6_2, h:h})
+  list.push({Hwnd:"sc29",  Text:"Ctrl",  x:"m", y:m.2, w:w1_2, h:h})
+  list.push({Hwnd:"sc347", Text:"Win",   x:m.2, y:"",  w:w1_2, h:h})
+  list.push({Hwnd:"sc56",  Text:"Alt",   x:m.2, y:"",  w:w1_2, h:h})
   list.push({Hwnd:"sc57",  Text:"Space", x:m.2, y:"",  w:w6_3, h:h})
-  list.push({Hwnd:"sc312", Text:"Alt",   x:m.2, y:"",  w:w6_2, h:h})
-  list.push({Hwnd:"sc348", Text:"Win",   x:m.2, y:"",  w:w6_2, h:h})
-  list.push({Hwnd:"sc285", Text:"Ctrl",  x:m.2, y:"",  w:w6_1, h:h})
-
+  list.push({Hwnd:"sc312", Text:"Alt",   x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc163", Text:"Fn",   x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc285", Text:"Ctrl",  x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc331", Text:"◀",  x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc336", Text:"▼",  x:m.2, y:"",  w:w, h:h})
+  list.push({Hwnd:"sc333", Text:"▶",  x:m.2, y:"",  w:w, h:h})
   ; 定位翻页键的区域，确保高度与第二行一致。temp1:="ym+123 Section"
-  temp1:="m+" h+m.3 " Section"
-  list.push({Hwnd:"sc338", Text:"Insert", x:m.6, y:temp1, w:w, h:h})
-  list.push({Hwnd:"sc327", Text:"Home",   x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc329", Text:"PageUp", x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc339", Text:"Delete", x:"s", y:m.2,   w:w, h:h})
-  list.push({Hwnd:"sc335", Text:"End",    x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc337", Text:"PageDn", x:m.2, y:"",    w:w, h:h})
+  ; temp1:="m+" h+m.3 " Section"
+  ; list.push({Hwnd:"sc338", Text:"Insert", x:m.6, y:temp1, w:w, h:h})
+  ; list.push({Hwnd:"sc327", Text:"Home",   x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc329", Text:"PageUp", x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc339", Text:"Delete", x:"s", y:m.2,   w:w, h:h})
+  ; list.push({Hwnd:"sc335", Text:"End",    x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc337", Text:"PageDn", x:m.2, y:"",    w:w, h:h})
 
-  ; 定位方向键的区域，确保高度与第五行一致。temp1:="xs+123" temp2:="y+123"
-  temp1:="s+" w+m.1, temp2:="+" h+2*m.1
-  list.push({Hwnd:"sc328", Text:"▲", x:temp1, y:temp2, w:w, h:h})
-  list.push({Hwnd:"sc331", Text:"◀", x:"s",   y:m.2,   w:w, h:h})
-  list.push({Hwnd:"sc336", Text:"▼", x:m.2,   y:"",    w:w, h:h})
-  list.push({Hwnd:"sc333", Text:"▶", x:m.2,   y:"",    w:w, h:h})
+  ; ; 定位方向键的区域，确保高度与第五行一致。temp1:="xs+123" temp2:="y+123"
+  ; temp1:="s+" w+m.1, temp2:="+" h+2*m.1
+  ; list.push({Hwnd:"sc328", Text:"▲", x:temp1, y:temp2, w:w, h:h})
+  ; list.push({Hwnd:"sc331", Text:"◀", x:"s",   y:m.2,   w:w, h:h})
+  ; list.push({Hwnd:"sc336", Text:"▼", x:m.2,   y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc333", Text:"▶", x:m.2,   y:"",    w:w, h:h})
 
   ; 定位数字键盘的区域，确保高度与第二行一致。temp1:="ym+123 Section"
-  temp1:="m+" h+m.3 " Section"
-  list.push({Hwnd:"sc325", Text:"NumLock", x:m.6, y:temp1, w:w, h:h})
-  list.push({Hwnd:"sc309", Text:"/",       x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc55",  Text:"*",       x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc74",  Text:"-",       x:m.2, y:"",    w:w, h:h})
-  ; 数字键盘第二行
-  list.push({Hwnd:"sc71", Text:"7",        x:"s", y:m.2,   w:w, h:h})
-  list.push({Hwnd:"sc72", Text:"8",        x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc73", Text:"9",        x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc78", Text:"+",        x:m.2, y:"",    w:w, h:h*2+m.1})
-  ; 数字键盘第三行
-  temp1:="s+" (h+m.1)*2
-  list.push({Hwnd:"sc75", Text:"4",        x:"s", y:temp1, w:w, h:h})
-  list.push({Hwnd:"sc76", Text:"5",        x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc77", Text:"6",        x:m.2, y:"",    w:w, h:h})
-  ; 数字键盘第四行
-  temp1:="s+" (h+m.1)*3
-  list.push({Hwnd:"sc79",  Text:"1",       x:"s", y:temp1, w:w, h:h})
-  list.push({Hwnd:"sc80",  Text:"2",       x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc81",  Text:"3",       x:m.2, y:"",    w:w, h:h})
-  list.push({Hwnd:"sc284", Text:"Enter",   x:m.2, y:"",    w:w, h:h*2+m.1})
-  ; 数字键盘第五行
-  temp1:="s+" (h+m.1)*4
-  list.push({Hwnd:"sc82", Text:"0",        x:"s", y:temp1, w:w*2+m.1, h:h})
-  list.push({Hwnd:"sc83", Text:".",        x:m.2, y:"",    w:w,       h:h})
+  ; temp1:="m+" h+m.3 " Section"
+  ; list.push({Hwnd:"sc325", Text:"NumLock", x:m.6, y:temp1, w:w, h:h})
+  ; list.push({Hwnd:"sc309", Text:"/",       x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc55",  Text:"*",       x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc74",  Text:"-",       x:m.2, y:"",    w:w, h:h})
+  ; ; 数字键盘第二行
+  ; list.push({Hwnd:"sc71", Text:"7",        x:"s", y:m.2,   w:w, h:h})
+  ; list.push({Hwnd:"sc72", Text:"8",        x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc73", Text:"9",        x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc78", Text:"+",        x:m.2, y:"",    w:w, h:h*2+m.1})
+  ; ; 数字键盘第三行
+  ; temp1:="s+" (h+m.1)*2
+  ; list.push({Hwnd:"sc75", Text:"4",        x:"s", y:temp1, w:w, h:h})
+  ; list.push({Hwnd:"sc76", Text:"5",        x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc77", Text:"6",        x:m.2, y:"",    w:w, h:h})
+  ; ; 数字键盘第四行
+  ; temp1:="s+" (h+m.1)*3
+  ; list.push({Hwnd:"sc79",  Text:"1",       x:"s", y:temp1, w:w, h:h})
+  ; list.push({Hwnd:"sc80",  Text:"2",       x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc81",  Text:"3",       x:m.2, y:"",    w:w, h:h})
+  ; list.push({Hwnd:"sc284", Text:"Enter",   x:m.2, y:"",    w:w, h:h*2+m.1})
+  ; ; 数字键盘第五行
+  ; temp1:="s+" (h+m.1)*4
+  ; list.push({Hwnd:"sc82", Text:"0",        x:"s", y:temp1, w:w*2+m.1, h:h})
+  ; list.push({Hwnd:"sc83", Text:".",        x:m.2, y:"",    w:w,       h:h})
 
   ; 信息框
-    temp1:="m+" w*13+Round(m.7*3)+m.1*9+m.5
+    temp1:="m+" w*14+Round(m.7*3)+m.1*9+m.5
   , temp2:=w*7+m.1*5+m.5    ; 与 翻页键区域 + 数字键盘区域 等宽
   , temp3:=h                ; 与 单个按键等高
   list.push({Hwnd:"Message", Text:"",      x:temp1, y:"m", w:temp2, h:temp3})
 
   ; 信息框放大后会被遮挡的按键列表
-  list.Covered := ["sc338", "sc327", "sc329", "sc339", "sc335", "sc337"  ; 翻页区
-                 , "sc328", "sc331", "sc336", "sc333"                    ; 方向区
-                 , "sc325", "sc309", "sc55",  "sc74"                     ; 小键盘区
-                 , "sc71",  "sc72",  "sc73",  "sc78"
-                 , "sc75",  "sc76",  "sc77"
-                 , "sc79",  "sc80",  "sc81",  "sc284"
-                 , "sc82",  "sc83"]
+  ; list.Covered := ["sc338", "sc327", "sc329", "sc339", "sc335", "sc337"  ; 翻页区
+  ;                , "sc328", "sc331", "sc336", "sc333"                    ; 方向区
+  ;                , "sc325", "sc309", "sc55",  "sc74"                     ; 小键盘区
+  ;                , "sc71",  "sc72",  "sc73",  "sc78"
+  ;                , "sc75",  "sc76",  "sc77"
+  ;                , "sc79",  "sc80",  "sc81",  "sc284"
+  ;                , "sc82",  "sc83"]
 
   ; Color 没有 0x 前缀。背景色影响 GUI 信息框 当日按键数据太少时的按键。不影响数据量足够后的按键。
   list.Opt := {Font:"comic sans ms", FontSize:9, BackgroundColor:"EEEEEE", TextColor:"575757"}
@@ -952,8 +963,8 @@ MultiLanguage:
     L_welcome_sub:="KMCounter will stay in the tray menu for statistics.`nClick the tray icon to view the results."
   }
 return
-
-#Include <OSDTIP>
-#Include <Class_CtlColors>
-#Include <Class_ImageButton>
-#Include <UseGDIP>
+#Include BTT.ahk
+#Include OSDTIP.ahk
+#Include Class_CtlColors.ahk
+#Include Class_ImageButton.ahk
+#Include UseGDIP.ahk
